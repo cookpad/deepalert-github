@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -13,6 +14,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+
+	"github.com/m-mizutani/deepalert"
 )
 
 var (
@@ -20,7 +23,7 @@ var (
 	Logger = logrus.New()
 )
 
-type vtSecrets struct {
+type githubSettings struct {
 	GithubToken    string `json:"github_token"`
 	GithubEndpoint string `json:"github_endpoint"`
 	GithubRepo     string `json:"github_repo"`
@@ -56,8 +59,20 @@ func getSecretValues(secretArn string, values interface{}) error {
 }
 
 func handler(ctx context.Context, snsEvent events.SNSEvent) error {
+	var secrets githubSettings
+	if err := getSecretValues(os.Getenv("SecretArn"), &secrets); err != nil {
+		return err
+	}
+
 	for _, record := range snsEvent.Records {
-		fmt.Sprintf("%v\n", record)
+		var report deepalert.Report
+		if err := json.Unmarshal([]byte(record.SNS.Message), &report); err != nil {
+			return err
+		}
+
+		if err := publishReport(report, secrets); err != nil {
+			return errors.Wrap(err, "Fail to publish report to Github")
+		}
 	}
 
 	return nil
