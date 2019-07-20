@@ -11,9 +11,6 @@ BASE_FILE := $(CODE_DIR)/template.libsonnet
 
 all: deploy
 
-test:
-	go test -v
-
 clean:
 	rm build/main
 

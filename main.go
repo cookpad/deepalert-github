@@ -70,7 +70,9 @@ func handler(ctx context.Context, snsEvent events.SNSEvent) error {
 			return err
 		}
 
-		if err := publishReport(report, secrets); err != nil {
+		if issue, err := publishReport(report, secrets); err == nil {
+			Logger.WithField("url", issue.GetHTMLURL()).Info("Issue created")
+		} else {
 			return errors.Wrap(err, "Fail to publish report to Github")
 		}
 	}
