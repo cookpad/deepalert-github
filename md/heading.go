@@ -8,7 +8,12 @@ type Heading struct {
 }
 
 func (x *Heading) Render(w io.Writer) error {
-	for i := 0; i < x.Level; i++ {
+	level := x.Level
+	if level == 0 {
+		level = 1
+	}
+
+	for i := 0; i < level; i++ {
 		if _, err := w.Write([]byte("#")); err != nil {
 			return err
 		}

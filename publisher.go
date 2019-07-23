@@ -32,7 +32,7 @@ func newGithubClient(endpoint, token string) (*github.Client, error) {
 }
 
 func reportToTitle(report deepalert.Report) string {
-	return fmt.Sprintf("[%s] %s", report.Alerts[0].Detector, report.Alerts[0].RuleName)
+	return fmt.Sprintf("[%s] %s: %s", report.Alerts[0].Detector, report.Alerts[0].RuleName, report.Alerts[0].Description)
 }
 
 func publishReport(report deepalert.Report, settings githubSettings) (*github.Issue, error) {

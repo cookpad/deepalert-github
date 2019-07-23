@@ -84,11 +84,40 @@ func TestBodyBuild(t *testing.T) {
 				},
 				Type: deepalert.ContentHost,
 				Content: deepalert.ReportHost{
+					IPAddr: []string{"10.0.1.2"},
 					RelatedDomains: []deepalert.EntityDomain{
 						{
 							Name:      "example.net",
 							Timestamp: time.Now(),
 							Source:    "tester",
+						},
+					},
+				},
+			},
+			{
+				Author: "SomeVirusScanner",
+				Type:   deepalert.ContentHost,
+				Attribute: deepalert.Attribute{
+					Type:    deepalert.TypeIPAddr,
+					Key:     "source",
+					Value:   "192.168.0.2",
+					Context: []deepalert.AttrContext{deepalert.CtxRemote},
+				},
+				Content: deepalert.ReportHost{
+					RelatedMalware: []deepalert.EntityMalware{
+						{
+							SHA256:    "abcdefg",
+							Timestamp: time.Now(),
+							Scans: []deepalert.EntityMalwareScan{
+								{
+									Vendor: "normalVender",
+									Name:   "some_malware",
+								},
+								{
+									Vendor: "superVender",
+									Name:   "some_malware2",
+								},
+							},
 						},
 					},
 				},

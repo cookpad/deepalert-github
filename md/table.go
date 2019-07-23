@@ -25,6 +25,11 @@ func (x *Table) Render(w io.Writer) error {
 			return err
 		}
 	}
+
+	if _, err := w.Write([]byte("\n")); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -48,17 +53,21 @@ func (x *TableHead) Render(w io.Writer) error {
 		var sep string
 		switch col.Align {
 		case AlignLeft:
-			sep = ":------"
+			sep = ":------|"
 		case AlignCenter:
-			sep = ":------:"
+			sep = ":------:|"
 		case AlignRight:
-			sep = "-------:"
+			sep = "-------:|"
 		}
 
-		w.Write([]byte(sep))
-		w.Write([]byte("|"))
+		if _, err := w.Write([]byte(sep)); err != nil {
+			return err
+		}
 	}
-	w.Write([]byte("\n"))
+
+	if _, err := w.Write([]byte("\n")); err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -82,10 +91,10 @@ func (x *TableRow) Render(w io.Writer) error {
 }
 
 type TableCol struct {
-	Align ColumnAlign
-	Container
+	Align   ColumnAlign
+	Content Node
 }
 
 func (x *TableCol) Render(w io.Writer) error {
-	return x.Container.Render(w)
+	return x.Content.Render(w)
 }

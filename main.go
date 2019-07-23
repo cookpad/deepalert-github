@@ -59,8 +59,10 @@ func getSecretValues(secretArn string, values interface{}) error {
 }
 
 func handler(ctx context.Context, snsEvent events.SNSEvent) error {
+	Logger.WithField("event", snsEvent).Info("Start handler")
+
 	var secrets githubSettings
-	if err := getSecretValues(os.Getenv("SecretArn"), &secrets); err != nil {
+	if err := getSecretValues(os.Getenv("SECRET_ARN"), &secrets); err != nil {
 		return err
 	}
 
@@ -81,5 +83,8 @@ func handler(ctx context.Context, snsEvent events.SNSEvent) error {
 }
 
 func main() {
+	Logger.SetFormatter(&logrus.JSONFormatter{})
+	Logger.SetLevel(logrus.InfoLevel)
+
 	lambda.Start(handler)
 }
