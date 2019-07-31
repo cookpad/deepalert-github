@@ -6,7 +6,7 @@ import (
 )
 
 func buildBinaryInspections(binaries map[string][]deepalert.ReportBinary,
-	attrs map[string]*deepalert.Attribute) (nodes []md.Node) {
+	attrs map[string]deepalert.Attribute) (nodes []md.Node) {
 	// ToDo: Not yet implemented
 	return nil
 }

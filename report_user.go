@@ -8,7 +8,7 @@ import (
 )
 
 func buildUserInspections(users map[string][]deepalert.ReportUser,
-	attrs map[string]*deepalert.Attribute) (nodes []md.Node) {
+	attrs map[string]deepalert.Attribute) (nodes []md.Node) {
 
 	if len(users) == 0 {
 		return
@@ -20,13 +20,13 @@ func buildUserInspections(users map[string][]deepalert.ReportUser,
 
 		nodes = append(nodes, &md.Heading{
 			Level:   2,
-			Content: md.ToLiteral(fmt.Sprintf("User: %s", attr.Value)),
+			Content: md.ToLiteral(fmt.Sprintf("User: `%s`", attr.Value)),
 		})
 
 		nodes = append(nodes, buildActivitiesSection(merged.Activities)...)
 	}
 
-	return nil
+	return
 }
 
 func mergeReportUser(contents []deepalert.ReportUser) (merged deepalert.ReportUser) {

@@ -129,9 +129,12 @@ func buildInspections(report deepalert.Report) []md.Node {
 		},
 	}
 
+	Logger.WithField("map", reportMap).Info("Report map")
 	nodes = append(nodes, buildHostInspections(reportMap.Hosts, reportMap.Attributes)...)
 	nodes = append(nodes, buildUserInspections(reportMap.Users, reportMap.Attributes)...)
 	nodes = append(nodes, buildBinaryInspections(reportMap.Binaries, reportMap.Attributes)...)
+
+	Logger.WithField("nodes", nodes).Info("Built inspection report")
 
 	return nodes
 }
@@ -195,6 +198,9 @@ func buildSystemReport(report deepalert.Report) (nodes []md.Node) {
 			},
 		},
 	}...)
+
+	Logger.WithField("nodes", nodes).Info("Built system report")
+
 	return
 }
 

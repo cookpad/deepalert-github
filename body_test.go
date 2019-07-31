@@ -54,7 +54,7 @@ func TestBodyBuild(t *testing.T) {
 				},
 			},
 		},
-		Contents: []deepalert.ReportContent{
+		Sections: []deepalert.ReportSection{
 			{
 				Author: "Familiar1",
 				Attribute: deepalert.Attribute{
@@ -118,6 +118,24 @@ func TestBodyBuild(t *testing.T) {
 									Name:   "some_malware2",
 								},
 							},
+						},
+					},
+				},
+			},
+			{
+				Author: "xxxx",
+				Type:   deepalert.ContentUser,
+				Attribute: deepalert.Attribute{
+					Type:    deepalert.TypeUserName,
+					Key:     "name",
+					Value:   "blue",
+					Context: []deepalert.AttrContext{deepalert.CtxRemote},
+				},
+				Content: deepalert.ReportUser{
+					Activities: []deepalert.EntityActivity{
+						{
+							ServiceName: "magic",
+							RemoteAddr:  "10.2.3.4",
 						},
 					},
 				},

@@ -36,6 +36,8 @@ func reportToTitle(report deepalert.Report) string {
 }
 
 func publishReport(report deepalert.Report, settings githubSettings) (*github.Issue, error) {
+	Logger.WithField("report", report).Info("Publishing report")
+
 	client, err := newGithubClient(settings.GithubEndpoint, settings.GithubToken)
 	if err != nil {
 		return nil, errors.Wrap(err, "Fail to create ")

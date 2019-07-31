@@ -8,7 +8,7 @@ import (
 )
 
 func buildHostInspections(hosts map[string][]deepalert.ReportHost,
-	attrs map[string]*deepalert.Attribute) (nodes []md.Node) {
+	attrs map[string]deepalert.Attribute) (nodes []md.Node) {
 
 	if len(hosts) == 0 {
 		return
