@@ -23,12 +23,6 @@ var (
 	Logger = logrus.New()
 )
 
-type githubSettings struct {
-	GithubToken    string `json:"github_token"`
-	GithubEndpoint string `json:"github_endpoint"`
-	GithubRepo     string `json:"github_repo"`
-}
-
 func getSecretValues(secretArn string, values interface{}) error {
 	// sample: arn:aws:secretsmanager:ap-northeast-1:1234567890:secret:mytest
 	arn := strings.Split(secretArn, ":")
