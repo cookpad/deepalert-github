@@ -18,9 +18,12 @@ import (
 )
 
 type testConfig struct {
-	GithubToken    string
-	GithubEndpoint string
-	GithubRepo     string
+	GithubToken      string
+	GithubEndpoint   string
+	GithubRepo       string
+	GithubAppID      string
+	GithubInstallID  string
+	GithubPrivateKey string
 }
 
 var config testConfig

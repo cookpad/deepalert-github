@@ -104,7 +104,7 @@ func reportToTitle(report deepalert.Report) string {
 	return fmt.Sprintf("[%s] %s: %s", report.Alerts[0].Detector, report.Alerts[0].RuleName, report.Alerts[0].Description)
 }
 
-func publishReport(report deepalert.Report, settings githubSettings) (*github.Issue, error) {
+func publish(report deepalert.Report, settings githubSettings) (*github.Issue, error) {
 	Logger.WithField("report", report).Info("Publishing report")
 
 	client, err := settings.newClient()
@@ -112,6 +112,20 @@ func publishReport(report deepalert.Report, settings githubSettings) (*github.Is
 		return nil, errors.Wrap(err, "Fail to create ")
 	}
 
+	path, err := publishAlert(client, report, settings)
+	if err != nil {
+		return nil, errors.Wrap(err, "Fail to publish alert")
+	}
+	Logger.WithField("path", path).Info("published alert")
+
+	return publishReport(client, report, settings)
+}
+
+func publishAlert(client *github.Client, report deepalert.Report, settings githubSettings) (string, error) {
+	return "", nil
+}
+
+func publishReport(client *github.Client, report deepalert.Report, settings githubSettings) (*github.Issue, error) {
 	title := reportToTitle(report)
 	buf, err := reportToBody(report)
 	if err != nil {
