@@ -1,6 +1,8 @@
 package main
 
 import (
+	"sort"
+
 	"github.com/m-mizutani/deepalert"
 	"github.com/m-mizutani/deepalert-github/md"
 )
@@ -22,6 +24,10 @@ func buildActivitiesSection(activities []deepalert.EntityActivity) (nodes []md.N
 			},
 		},
 	}
+
+	sort.Slice(activities, func(i, j int) bool {
+		return activities[i].LastSeen.After(activities[j].LastSeen)
+	})
 
 	for _, act := range activities {
 		table.Rows = append(table.Rows, md.TableRow{
