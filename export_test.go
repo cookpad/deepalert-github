@@ -7,8 +7,8 @@ import (
 
 type GithubSettings githubSettings
 
-func PublishReport(report deepalert.Report, settings GithubSettings) (*github.Issue, error) {
-	return publishReport(report, githubSettings(settings))
+func Publish(report deepalert.Report, settings GithubSettings) (*github.Issue, error) {
+	return publish(report, githubSettings(settings))
 }
 
 var (

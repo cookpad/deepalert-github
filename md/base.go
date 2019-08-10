@@ -1,6 +1,9 @@
 package md
 
-import "io"
+import (
+	"fmt"
+	"io"
+)
 
 type Node interface {
 	Render(w io.Writer) error
@@ -32,6 +35,11 @@ type Literal string
 
 func ToLiteral(s string) *Literal {
 	p := Literal(s)
+	return &p
+}
+
+func ToLiteralf(f string, v ...interface{}) *Literal {
+	p := Literal(fmt.Sprintf(f, v...))
 	return &p
 }
 

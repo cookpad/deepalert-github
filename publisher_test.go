@@ -69,7 +69,7 @@ func TestPublish(t *testing.T) {
 		},
 	}
 
-	issue, err := main.PublishReport(report, settings)
+	issue, err := main.Publish(report, settings)
 	assert.NoError(t, err)
 	assert.NotNil(t, issue)
 

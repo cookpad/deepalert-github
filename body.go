@@ -91,6 +91,9 @@ func buildSummary(report deepalert.Report) []md.Node {
 					md.ToLiteral("Rule: "),
 					md.ToCode(report.Alerts[0].RuleName),
 				}},
+				{Content: md.Contents{
+					md.ToLiteralf("Alert reports: [link](../tree/master/%s)", reportToPath(report)),
+				}},
 			},
 		},
 		&md.Heading{
@@ -139,41 +142,55 @@ func buildInspections(report deepalert.Report) []md.Node {
 	return nodes
 }
 
-func buildAlerts(report deepalert.Report) []md.Node {
+func buildAlert(alert deepalert.Alert) []md.Node {
+	title := fmt.Sprintf("[%s] %s: %s", alert.Detector, alert.RuleName, alert.Description)
+
 	nodes := []md.Node{
 		&md.Heading{
 			Level:   1,
-			Content: md.ToLiteral("Detail of Alerts"),
+			Content: md.ToLiteral(title),
 		},
 	}
 
-	for _, alert := range report.Alerts {
-		nodes = append(nodes, []md.Node{
-			&md.List{
-				Items: []md.ListItem{
-					{Content: md.Contents{
-						md.ToLiteral("Description: "),
-						md.ToLiteral(alert.Description),
-					}},
-					{Content: md.Contents{
-						md.ToLiteral("Detected at: "),
-						md.ToCode(alert.Timestamp.Format(timeFormat)),
-					}},
-				},
+	nodes = append(nodes, []md.Node{
+		&md.List{
+			Items: []md.ListItem{
+				{Content: md.Contents{
+					md.ToLiteral("Detector: "),
+					md.ToCode(alert.Detector),
+				}},
+				{Content: md.Contents{
+					md.ToLiteral("RuleName: "),
+					md.ToCode(alert.RuleName),
+				}},
+				{Content: md.Contents{
+					md.ToLiteral("RuleID: "),
+					md.ToCode(alert.RuleID),
+				}},
+				{Content: md.Contents{
+					md.ToLiteral("AlertKey: "),
+					md.ToCode(alert.AlertKey),
+				}},
+				{Content: md.Contents{
+					md.ToLiteral("Description: "),
+					md.ToLiteral(alert.Description),
+				}},
+				{Content: md.Contents{
+					md.ToLiteral("Detected at: "),
+					md.ToCode(alert.Timestamp.Format(timeFormat)),
+				}},
 			},
-			&md.Heading{Content: md.ToLiteral("Attributes"), Level: 2},
-		}...)
+		},
+		&md.Heading{Content: md.ToLiteral("Attributes"), Level: 2},
+	}...)
 
-		attrList := &md.List{}
-		for _, attr := range alert.Attributes {
-			attrList.Items = append(attrList.Items, md.ListItem{
-				Content: attrToContents(attr),
-			})
-		}
-
-		nodes = append(nodes, attrList)
-		nodes = append(nodes, &md.HorizontalRules{})
+	attrList := &md.List{}
+	for _, attr := range alert.Attributes {
+		attrList.Items = append(attrList.Items, md.ListItem{
+			Content: attrToContents(attr),
+		})
 	}
+	nodes = append(nodes, attrList)
 
 	return nodes
 }
@@ -208,7 +225,6 @@ func reportToBody(report deepalert.Report) (*bytes.Buffer, error) {
 	doc := &md.Document{}
 	doc.Extend(buildSummary(report))
 	doc.Extend(buildInspections(report))
-	doc.Extend(buildAlerts(report))
 	doc.Extend(buildSystemReport(report))
 
 	buf := new(bytes.Buffer)

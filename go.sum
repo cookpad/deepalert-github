@@ -44,6 +44,8 @@ github.com/konsorten/go-windows-terminal-sequences v1.0.2 h1:DB17ag19krx9CFsz4o3
 github.com/konsorten/go-windows-terminal-sequences v1.0.2/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/m-mizutani/deepalert v0.0.0-20190731113132-01f43e3da11b h1:Aao/zMthb7dPr9kOSat5+b7/NHPdsyRg9xvYZyCE7As=
 github.com/m-mizutani/deepalert v0.0.0-20190731113132-01f43e3da11b/go.mod h1:NlYGGNPITTcSiUbU7E2H830XI64/HSfV2GHpEqhBdhU=
+github.com/m-mizutani/deepalert v0.0.0-20190809012708-7dd2eb1980b9 h1:ItmMf/JJ/iWR3jeSDbzMdLOsKI+Gu7IBLzpOnAHZ2R0=
+github.com/m-mizutani/deepalert v0.0.0-20190809012708-7dd2eb1980b9/go.mod h1:NlYGGNPITTcSiUbU7E2H830XI64/HSfV2GHpEqhBdhU=
 github.com/m-mizutani/generalprobe v0.0.0-20190727060841-28e965caf579 h1:ysw/PuMP9wExFJiNqgmSpRgh6k613PI03bZHsXiQybU=
 github.com/m-mizutani/generalprobe v0.0.0-20190727060841-28e965caf579/go.mod h1:CuJ4AMonHoCfQcam3gni5BUzOSC06Ed7FhrPx6gDxYo=
 github.com/pkg/errors v0.8.0/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=

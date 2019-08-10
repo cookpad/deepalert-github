@@ -10,7 +10,7 @@ require (
 	github.com/golang/protobuf v1.3.2 // indirect
 	github.com/google/go-github/v27 v27.0.4
 	github.com/google/uuid v1.1.1
-	github.com/m-mizutani/deepalert v0.0.0-20190731113132-01f43e3da11b
+	github.com/m-mizutani/deepalert v0.0.0-20190809012708-7dd2eb1980b9
 	github.com/pkg/errors v0.8.1
 	github.com/sirupsen/logrus v1.4.2
 	github.com/stretchr/testify v1.3.0

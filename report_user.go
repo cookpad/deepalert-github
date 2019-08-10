@@ -24,6 +24,10 @@ func buildUserInspections(users map[string][]deepalert.ReportUser,
 		})
 
 		nodes = append(nodes, buildActivitiesSection(merged.Activities)...)
+
+		if len(nodes) == 1 {
+			nodes = append(nodes, md.ToLiteral("N/A"))
+		}
 	}
 
 	return

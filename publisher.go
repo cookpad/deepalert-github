@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"context"
+	"crypto/sha1"
 	"encoding/base64"
 	"fmt"
 	"net/http"
@@ -13,6 +15,7 @@ import (
 	"github.com/google/go-github/v27/github"
 	"github.com/m-mizutani/deepalert"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"golang.org/x/oauth2"
 )
 
@@ -30,7 +33,8 @@ func (x githubSettings) hasAppSettings() bool {
 }
 
 func (x githubSettings) newClient() (*github.Client, error) {
-	if x.hasAppSettings() {
+	switch {
+	case x.hasAppSettings():
 		appID, err := strconv.ParseInt(x.GithubAppID, 10, 64)
 		if err != nil {
 			return nil, errors.Wrapf(err, "Fail to parse appID: %s", x.GithubAppID)
@@ -47,7 +51,8 @@ func (x githubSettings) newClient() (*github.Client, error) {
 		}
 
 		return newGithubAppClient(x.GithubEndpoint, int(appID), int(installID), privateKey)
-	} else {
+
+	default:
 		return newGithubClient(x.GithubEndpoint, x.GithubToken)
 	}
 }
@@ -106,22 +111,76 @@ func reportToTitle(report deepalert.Report) string {
 
 func publish(report deepalert.Report, settings githubSettings) (*github.Issue, error) {
 	Logger.WithField("report", report).Info("Publishing report")
+	var issue *github.Issue
 
 	client, err := settings.newClient()
 	if err != nil {
 		return nil, errors.Wrap(err, "Fail to create ")
 	}
 
-	path, err := publishAlert(client, report, settings)
-	if err != nil {
-		return nil, errors.Wrap(err, "Fail to publish alert")
-	}
-	Logger.WithField("path", path).Info("published alert")
+	switch report.Status {
+	case deepalert.StatusNew:
+		fallthrough
+	case deepalert.StatusMore:
+		path, err := publishAlert(client, report, settings)
+		if err != nil {
+			return nil, errors.Wrap(err, "Fail to publish alert")
+		}
+		Logger.WithField("path", path).Info("published alert")
 
-	return publishReport(client, report, settings)
+	case deepalert.StatusPublished:
+		issue, err = publishReport(client, report, settings)
+		if err != nil {
+			return nil, err
+		}
+		Logger.WithField("issue", issue).Info("publish only a 'published' report")
+	}
+
+	return issue, nil
+}
+
+func reportToPath(report deepalert.Report) string {
+	return fmt.Sprintf("%s/%s/", report.CreatedAt.Format("2006/01/02"), report.ID)
 }
 
 func publishAlert(client *github.Client, report deepalert.Report, settings githubSettings) (string, error) {
+	ctx := context.Background()
+	arr := strings.Split(settings.GithubRepo, "/")
+	owner := arr[0]
+	repo := arr[1]
+
+	for _, alert := range report.Alerts {
+		nodes := buildAlert(alert)
+
+		buf := new(bytes.Buffer)
+		for _, node := range nodes {
+			if err := node.Render(buf); err != nil {
+				return "", err
+			}
+		}
+
+		data := buf.Bytes()
+		sha := sha1.Sum(data)
+		hv := fmt.Sprintf("%040x", sha)
+		opt := github.RepositoryContentFileOptions{
+			Message: github.String("add alert"),
+			Content: data,
+			SHA:     github.String(hv),
+			Branch:  github.String("master"),
+		}
+		dpath := reportToPath(report)
+		fpath := fmt.Sprintf("%s/%s_%s.md", dpath,
+			alert.Timestamp.Format("20060102_150405"), hv)
+		content, resp, err := client.Repositories.CreateFile(ctx, owner, repo, fpath, &opt)
+		Logger.WithFields(logrus.Fields{
+			"content": content,
+			"code":    resp.StatusCode,
+			"error":   err,
+		}).Info("Create file")
+		if resp.StatusCode != 409 && err != nil {
+			return "", errors.Wrap(err, "Fail to create a file")
+		}
+	}
 	return "", nil
 }
 

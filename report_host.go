@@ -29,6 +29,10 @@ func buildHostInspections(hosts map[string][]deepalert.ReportHost,
 		nodes = append(nodes, buildReportHostURLSection(merged.RelatedURLs)...)
 		nodes = append(nodes, buildReportHostMalwareSection(merged.RelatedMalware)...)
 		nodes = append(nodes, buildReportHostSoftwareSection(merged.Software)...)
+
+		if len(nodes) == 1 {
+			nodes = append(nodes, md.ToLiteral("N/A"))
+		}
 	}
 
 	return

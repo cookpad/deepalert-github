@@ -67,6 +67,7 @@ func handler(ctx context.Context, snsEvent events.SNSEvent) error {
 		}
 
 		Logger.WithField("report", report).Info("publishing report")
+
 		if issue, err := publish(report, secrets); err == nil {
 			Logger.WithField("url", issue.GetHTMLURL()).Info("Issue created")
 		} else {
