@@ -169,7 +169,7 @@ func publishAlert(client *github.Client, report deepalert.Report, settings githu
 			Branch:  github.String("master"),
 		}
 		dpath := reportToPath(report)
-		fpath := fmt.Sprintf("%s/%s_%s.md", dpath,
+		fpath := fmt.Sprintf("%s%s_%s.md", dpath,
 			alert.Timestamp.Format("20060102_150405"), hv)
 		content, resp, err := client.Repositories.CreateFile(ctx, owner, repo, fpath, &opt)
 		Logger.WithFields(logrus.Fields{
