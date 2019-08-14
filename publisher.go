@@ -129,11 +129,15 @@ func publish(report deepalert.Report, settings githubSettings) (*github.Issue, e
 		Logger.WithField("path", path).Info("published alert")
 
 	case deepalert.StatusPublished:
-		issue, err = publishReport(client, report, settings)
-		if err != nil {
-			return nil, err
+		if report.Result.Severity != deepalert.SevSafe {
+			issue, err = publishReport(client, report, settings)
+			if err != nil {
+				return nil, err
+			}
+			Logger.WithField("issue", issue).Info("publish only a 'published' report")
+		} else {
+			Logger.Info("Report is not published because the severity is safe")
 		}
-		Logger.WithField("issue", issue).Info("publish only a 'published' report")
 	}
 
 	return issue, nil
