@@ -171,9 +171,6 @@ func publishAlert(client *github.Client, report deepalert.Report, settings githu
 			Content: data,
 			SHA:     github.String(hv),
 			Branch:  github.String("master"),
-			Author: &github.CommitAuthor{
-				Name: github.String(alert.Detector),
-			},
 		}
 		dpath := reportToPath(report)
 		fpath := fmt.Sprintf("%s%s_%s.md", dpath,
