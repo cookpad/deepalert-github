@@ -163,10 +163,13 @@ func publishAlert(client *github.Client, report deepalert.Report, settings githu
 		sha := sha1.Sum(data)
 		hv := fmt.Sprintf("%040x", sha)
 		opt := github.RepositoryContentFileOptions{
-			Message: github.String("add alert"),
+			Message: github.String(fmt.Sprintf("[Alert] %s: %s", alert.RuleName, alert.Description)),
 			Content: data,
 			SHA:     github.String(hv),
 			Branch:  github.String("master"),
+			Author: &github.CommitAuthor{
+				Name: github.String(alert.Detector),
+			},
 		}
 		dpath := reportToPath(report)
 		fpath := fmt.Sprintf("%s%s_%s.md", dpath,
