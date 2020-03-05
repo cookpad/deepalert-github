@@ -178,10 +178,13 @@ func publishAlert(client *github.Client, report deepalert.Report, settings githu
 		content, resp, err := client.Repositories.CreateFile(ctx, owner, repo, fpath, &opt)
 		Logger.WithFields(logrus.Fields{
 			"content": content,
-			"code":    resp.StatusCode,
 			"error":   err,
 		}).Info("Create file")
-		if resp.StatusCode != 409 && err != nil {
+		if resp != nil {
+			Logger.WithField("code", resp.StatusCode).Info("Status code")
+		}
+
+		if err != nil || resp.StatusCode != 409 {
 			return "", errors.Wrap(err, "Fail to create a file")
 		}
 	}
