@@ -41,6 +41,16 @@ func attrToContents(attr deepalert.Attribute) md.Contents {
 			md.ToLiteral("\n"),
 		}...)
 
+	case deepalert.TypeURL:
+		if attr.Context.Have(deepalert.CtxAdditionalInfo) {
+			nodes = append(nodes, &md.Link{
+				Content: md.ToLiteral(attr.Value),
+				URL:     attr.Value,
+			})
+		} else {
+			nodes = append(nodes, md.ToCode(attr.Value))
+		}
+
 	default:
 		nodes = append(nodes, []md.Node{
 			md.ToLiteral(" ("),
@@ -90,6 +100,9 @@ func buildSummary(report deepalert.Report) []md.Node {
 				{Content: md.Contents{
 					md.ToLiteral("Rule: "),
 					md.ToCode(report.Alerts[0].RuleName),
+				}},
+				{Content: md.Contents{
+					md.ToLiteral("Created at: " + report.CreatedAt.String()),
 				}},
 				{Content: md.Contents{
 					md.ToLiteralf("Alert reports: [link](../tree/master/%s)", reportToPath(report)),
