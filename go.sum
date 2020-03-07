@@ -61,6 +61,8 @@ github.com/m-mizutani/deepalert v0.0.0-20200305111054-94b71833d3ee h1:8c4hQ9vLb5
 github.com/m-mizutani/deepalert v0.0.0-20200305111054-94b71833d3ee/go.mod h1:kktLv1BU83TO8tpO01AFs78zRJj0iGTlbknkVSQ08fk=
 github.com/m-mizutani/deepalert v0.0.0-20200305234201-5cf212e7d422 h1:hemUEPdRpHfpCrFFFaOzLEQlME2+xXnlE5CDAzToT5E=
 github.com/m-mizutani/deepalert v0.0.0-20200305234201-5cf212e7d422/go.mod h1:kktLv1BU83TO8tpO01AFs78zRJj0iGTlbknkVSQ08fk=
+github.com/m-mizutani/deepalert v0.0.0-20200307050939-e3e802cd1615 h1:NU1JPL5NanjApeLvX+Tcp7iJUPABVI2P3fXFfAGsEBw=
+github.com/m-mizutani/deepalert v0.0.0-20200307050939-e3e802cd1615/go.mod h1:kktLv1BU83TO8tpO01AFs78zRJj0iGTlbknkVSQ08fk=
 github.com/m-mizutani/generalprobe v0.0.0-20190727060841-28e965caf579 h1:ysw/PuMP9wExFJiNqgmSpRgh6k613PI03bZHsXiQybU=
 github.com/m-mizutani/generalprobe v0.0.0-20190727060841-28e965caf579/go.mod h1:CuJ4AMonHoCfQcam3gni5BUzOSC06Ed7FhrPx6gDxYo=
 github.com/pkg/errors v0.8.0/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=

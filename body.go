@@ -43,10 +43,13 @@ func attrToContents(attr deepalert.Attribute) md.Contents {
 
 	case deepalert.TypeURL:
 		if attr.Context.Have(deepalert.CtxAdditionalInfo) {
-			nodes = append(nodes, &md.Link{
-				Content: md.ToLiteral(attr.Value),
-				URL:     attr.Value,
-			})
+			nodes = append(nodes, []md.Node{
+				md.ToLiteral(": "),
+				&md.Link{
+					Content: md.ToLiteral(attr.Value),
+					URL:     attr.Value,
+				},
+			}...)
 		} else {
 			nodes = append(nodes, md.ToCode(attr.Value))
 		}
@@ -65,17 +68,11 @@ func attrToContents(attr deepalert.Attribute) md.Contents {
 
 func buildSummary(report deepalert.Report) []md.Node {
 	attrList := &md.List{}
-	attrMap := make(map[string]struct{})
-	for _, alert := range report.Alerts {
-		for _, attr := range alert.Attributes {
-			hash := attr.Hash()
-			if _, ok := attrMap[hash]; !ok {
-				attrList.Items = append(attrList.Items, md.ListItem{
-					Content: attrToContents(attr),
-				})
-				attrMap[hash] = struct{}{}
-			}
-		}
+
+	for _, attr := range report.Attributes {
+		attrList.Items = append(attrList.Items, md.ListItem{
+			Content: attrToContents(attr),
+		})
 	}
 
 	nodes := []md.Node{
