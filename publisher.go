@@ -109,7 +109,9 @@ func reportToTitle(report deepalert.Report) string {
 	return fmt.Sprintf("[%s] %s: %s", report.Alerts[0].Detector, report.Alerts[0].RuleName, report.Alerts[0].Description)
 }
 
-func publish(report deepalert.Report, settings githubSettings) (*github.Issue, error) {
+var publish = publishToGithub
+
+func publishToGithub(report deepalert.Report, settings githubSettings) (*github.Issue, error) {
 	Logger.WithField("report", report).Info("Publishing report")
 	var issue *github.Issue
 

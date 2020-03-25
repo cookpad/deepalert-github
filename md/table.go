@@ -96,5 +96,8 @@ type TableCol struct {
 }
 
 func (x *TableCol) Render(w io.Writer) error {
+	if x.Content == nil {
+		return nil
+	}
 	return x.Content.Render(w)
 }

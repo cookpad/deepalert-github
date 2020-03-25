@@ -23,7 +23,9 @@ var (
 	Logger = logrus.New()
 )
 
-func getSecretValues(secretArn string, values interface{}) error {
+var getSecretValues = awsGetSecretValues
+
+func awsGetSecretValues(secretArn string, values interface{}) error {
 	// sample: arn:aws:secretsmanager:ap-northeast-1:1234567890:secret:mytest
 	arn := strings.Split(secretArn, ":")
 	if len(arn) != 7 {
@@ -52,11 +54,15 @@ func getSecretValues(secretArn string, values interface{}) error {
 	return nil
 }
 
-func handler(ctx context.Context, snsEvent events.SNSEvent) error {
+func lambdaHandler(ctx context.Context, snsEvent events.SNSEvent) error {
+	return handler(os.Getenv("SECRET_ARN"), snsEvent)
+}
+
+func handler(secretArn string, snsEvent events.SNSEvent) error {
 	Logger.WithField("event", snsEvent).Info("Start handler")
 
 	var secrets githubSettings
-	if err := getSecretValues(os.Getenv("SECRET_ARN"), &secrets); err != nil {
+	if err := getSecretValues(secretArn, &secrets); err != nil {
 		return err
 	}
 
@@ -82,5 +88,5 @@ func main() {
 	Logger.SetFormatter(&logrus.JSONFormatter{})
 	Logger.SetLevel(logrus.InfoLevel)
 
-	lambda.Start(handler)
+	lambda.Start(lambdaHandler)
 }

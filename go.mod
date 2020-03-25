@@ -19,5 +19,6 @@ require (
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
 	golang.org/x/tools v0.0.0-20190726230722-1bd56024c620 // indirect
 	google.golang.org/appengine v1.6.1 // indirect
+	gopkg.in/go-playground/assert.v1 v1.2.1
 	gopkg.in/urfave/cli.v1 v1.20.0 // indirect
 )
